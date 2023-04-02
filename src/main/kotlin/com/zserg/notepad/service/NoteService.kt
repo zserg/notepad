@@ -5,6 +5,8 @@ import com.zserg.notepad.model.NoteRequest
 import com.zserg.notepad.repository.NoteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -24,41 +26,18 @@ class NoteService {
         return note
     }
 
-//    fun getRandomSubtitles(): Subtitles? {
-//        return flashcardsRepository.findAll().random()?.let {
-//            getParallelSubtitles(it, -1, 20)
-////            val subtitles = getParallelSubtitles(it, -1, 20)
-////            SubtitlesView(
-////                subtitles.title,
-////                subtitles.subs1.joinToString(separator = "\n"),
-////                subtitles.subs2.joinToString(separator = "\n"),
-////            )
-//        }
-//    }
+    fun findAll(): List<Note> {
+        return noteRepository.findAll()
+    }
 
-//    fun getSubtitles(id: String, start: Long, length: Long): Optional<Subtitles> {
-//        return flashcardsRepository.findById(id).map { p ->
-//            getParallelSubtitles(p, start, length)
-//        }
-//    }
-//
-//    private fun getParallelSubtitles(pairSubs: PairSubs, start: Long, length: Long): Subtitles {
-//        val (startTime1, endTime1, startTime2, endTime2) = pairSubs.getIntervals(start, length)
-//
-//        val subtitles = Subtitles(
-//            pairSubs.title,
-//            getSubtitles(pairSubs.subs1.subs, startTime1, endTime1),
-//            getSubtitles(pairSubs.subs2.subs, startTime2, endTime2),
-//        )
-//        return subtitles;
-//
-//    }
-//
-//    private fun getSubtitles(subs: List<SubItem>, startTime: LocalTime, endTime: LocalTime): List<String> {
-//        return subs.filter { s -> s.start.isAfter(startTime) && s.end.isBefore(endTime) }
-//            .map(SubItem::text)
-//            .toList()
-//    }
-
+    fun find(fromDate: LocalDateTime?, toDateTime: LocalDateTime?): List<Note> {
+        return if (fromDate == null && toDateTime == null) {
+            noteRepository.findAll()
+        } else {
+            noteRepository.findByCreatedAtBetween(
+                fromDate ?: LocalDate.of(2020, 1, 1).atStartOfDay(),
+                toDateTime?: LocalDate.of(2100, 1, 1).atStartOfDay());
+        }
+    }
 
 }

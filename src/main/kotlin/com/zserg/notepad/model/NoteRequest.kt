@@ -1,5 +1,7 @@
 package com.zserg.notepad.model
 
+import java.time.LocalDateTime
+
 data class NoteRequest(
     val id: String?,
     val title: String?,
@@ -13,6 +15,7 @@ data class NoteRequest(
             title = title ?: "",
             content = content,
             tags = tags ?: emptyList(),
+            createdAt = LocalDateTime.now()
         )
     }
 }

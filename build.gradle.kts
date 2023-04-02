@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.0.4"
     id("io.spring.dependency-management") version "1.1.0"
-    id("com.google.cloud.tools.jib") version "2.3.0"
+    id("com.google.cloud.tools.jib") version "3.3.1"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
 }
@@ -29,6 +29,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.6.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")

@@ -2,13 +2,14 @@ package com.zserg.notepad.controller
 
 import com.zserg.notepad.model.Note
 import com.zserg.notepad.model.NoteRequest
+import com.zserg.notepad.model.NoteResponse
 import com.zserg.notepad.service.NoteService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.data.domain.Example
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 import java.util.*
 
@@ -30,6 +31,19 @@ class Controller {
     @ResponseBody
     fun upload(@RequestBody note: NoteRequest): String? {
         return noteService.saveNote(note)
+    }
+
+    @GetMapping
+    @ResponseBody
+    fun findAll(
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) fromDate: LocalDateTime?,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) toDate: LocalDateTime?,
+    ): List<NoteResponse> {
+        return if(fromDate == null && toDate == null) {
+            noteService.findAll().map { NoteResponse(it) }
+        }else{
+            noteService.find(fromDate, toDate).map { NoteResponse(it) }
+        }
     }
 
 //    @GetMapping("{id}", params = ["!textOnly"])
