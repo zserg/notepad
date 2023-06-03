@@ -27,6 +27,7 @@ class MongoTest {
             title = "title",
             content = "content",
             tags = listOf("tag1", "tag2"),
+            createdAt = null
         )
         val save = noteRepository.save(note)
         val all = noteRepository.findAll()
