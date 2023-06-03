@@ -6,10 +6,9 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.*
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.*
 
 
 @Repository
@@ -17,10 +16,11 @@ class NoteCustomRepositoryImpl : NoteCustomRepository {
     @Autowired
     private lateinit var mongoTemplate: MongoTemplate
 
-    override fun findByParams(fromDate: LocalDateTime?, toDate: LocalDateTime?, tags: List<String>): List<Note> {
+    override fun findByParams(fromDate: LocalDateTime?, toDate: LocalDateTime?, title: String?, tags: List<String>): List<Note> {
         val query = Query()
-        fromDate?.let { query.addCriteria(Criteria.where("createdAt").gte(fromDate)) }
-        toDate?.let { query.addCriteria(Criteria.where("createdAt").lte(toDate)) }
+        fromDate?.let { query.addCriteria(Criteria.where("createdAt").gte(it)) }
+        toDate?.let { query.addCriteria(Criteria.where("createdAt").lte(it)) }
+        title?.let { query.addCriteria(Criteria.where("title").isEqualTo(it)) }
         if (tags.isNotEmpty()) {
             query.addCriteria(Criteria.where("tags").`in`(tags))
         }

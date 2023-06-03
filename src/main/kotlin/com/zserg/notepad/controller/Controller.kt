@@ -10,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.time.LocalDateTime
 import java.util.*
 
@@ -33,9 +32,10 @@ class Controller {
     fun findAll(
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) fromDate: LocalDateTime?,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) toDate: LocalDateTime?,
+        @RequestParam(required = false) title: String?,
         @RequestParam(required = false) tags: List<String>?
     ): List<NoteResponse> {
-        return noteService.find(fromDate, toDate, tags ?: listOf()).map { NoteResponse(it) }
+        return noteService.find(fromDate, toDate, title, tags ?: listOf()).map { NoteResponse(it) }
     }
 
     @GetMapping("/{id}")
@@ -60,13 +60,5 @@ class Controller {
         return noteService.updateFlashCard(id, flashcardUpdateRequest)
             .map { NoteResponse(it) }
     }
-
-    @PostMapping("/flashcard/upload")
-    @ResponseBody
-    open fun uploadFile(@RequestParam("file") file: MultipartFile): UploadFileResponse {
-        val response: UploadFileResponse = noteService.uploadFile(file)
-        return response
-    }
-
 
 }
