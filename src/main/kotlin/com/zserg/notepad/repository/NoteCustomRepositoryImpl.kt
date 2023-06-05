@@ -18,8 +18,12 @@ class NoteCustomRepositoryImpl : NoteCustomRepository {
 
     override fun findByParams(fromDate: LocalDateTime?, toDate: LocalDateTime?, title: String?, tags: List<String>): List<Note> {
         val query = Query()
-        fromDate?.let { query.addCriteria(Criteria.where("createdAt").gte(it)) }
-        toDate?.let { query.addCriteria(Criteria.where("createdAt").lte(it)) }
+        if(fromDate != null && toDate != null) {
+            query.addCriteria(Criteria.where("createdAt").gte(fromDate).lte(toDate))
+        }else {
+            fromDate?.let { query.addCriteria(Criteria.where("createdAt").gte(it)) }
+            toDate?.let { query.addCriteria(Criteria.where("createdAt").lte(it)) }
+        }
         title?.let { query.addCriteria(Criteria.where("title").isEqualTo(it)) }
         if (tags.isNotEmpty()) {
             query.addCriteria(Criteria.where("tags").`in`(tags))
