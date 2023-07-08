@@ -1,9 +1,6 @@
 package com.zserg.notepad.controller
 
-import com.zserg.notepad.model.FlashcardUpdateRequest
-import com.zserg.notepad.model.NoteRequest
-import com.zserg.notepad.model.NoteResponse
-import com.zserg.notepad.model.UploadFileResponse
+import com.zserg.notepad.model.*
 import com.zserg.notepad.service.NoteService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.format.annotation.DateTimeFormat
@@ -36,6 +33,12 @@ class Controller {
         @RequestParam(required = false) tags: List<String>?
     ): List<NoteResponse> {
         return noteService.find(fromDate, toDate, title, tags ?: listOf()).map { NoteResponse(it) }
+    }
+
+    @PostMapping("/find")
+    @ResponseBody
+    fun findAllPost(@RequestBody findRequest: FindRequest): List<NoteResponse> {
+        return noteService.find(findRequest.fromDate, findRequest.toDate, findRequest.title, findRequest.tags ?: listOf()).map { NoteResponse(it) }
     }
 
     @GetMapping("/{id}")
